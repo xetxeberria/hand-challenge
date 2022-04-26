@@ -24,9 +24,13 @@ export class Translator {
   private inputInstructions: Array<Instruction> = [];
   private index: number = 0;
 
+  private loopIndexes: Map<number, number> = new Map<number, number>();
+
   async run(inputFilePath: string): Promise<string> {
     const fileContent = (await fs.promises.readFile(inputFilePath)).toString().trim();
     this.inputInstructions = Array.from(fileContent) as Array<Instruction>;
+
+    this.lookForLoops();
 
     while (this.index < this.inputInstructions.length) {
       const instruction = this.inputInstructions[this.index];
@@ -35,7 +39,20 @@ export class Translator {
       this.index++;
     }
 
-    return this.result;
+    return this.result.trim();
+  }
+
+  private lookForLoops(): void {
+    const loopsStack: Array<number> = [];
+    this.inputInstructions.forEach((instruction, index) => {
+      if (instruction === "🤜") {
+        loopsStack.push(index);
+      } else if (instruction === "🤛") {
+        const loopStart = loopsStack.pop();
+        this.loopIndexes.set(loopStart!, index);
+        this.loopIndexes.set(index, loopStart!);
+      }
+    });
   }
 
   private increasePointer(): void {
@@ -57,13 +74,13 @@ export class Translator {
 
   private startLoop(): void {
     if (this.currentValue() === 0) {
-      // this.index = this.inputInstructions.indexOf("🤛", this.index);
+      this.index = this.loopIndexes.get(this.index)!;
     }
   }
 
   private endLoop(): void {
     if (this.currentValue() !== 0) {
-      // this.index = this.inputInstructions.lastIndexOf("🤜", this.index);
+      this.index = this.loopIndexes.get(this.index)!;
     }
   }
 
