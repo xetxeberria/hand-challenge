@@ -28,9 +28,12 @@ export class Translator {
 
   async run(inputFilePath: string): Promise<string> {
     const fileContent = (await fs.promises.readFile(inputFilePath)).toString().trim();
+    console.log("File loaded");
     this.inputInstructions = Array.from(fileContent) as Array<Instruction>;
+    console.log(`The file contains ${this.inputInstructions.length} instructions`);
 
     this.lookForLoops();
+    console.log("Loops initialized");
 
     while (this.index < this.inputInstructions.length) {
       const instruction = this.inputInstructions[this.index];
