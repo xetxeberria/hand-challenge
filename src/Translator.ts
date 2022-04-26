@@ -21,14 +21,15 @@ export class Translator {
 
   private result: string = "";
 
+  private inputInstructions: Array<Instruction> = [];
   private index: number = 0;
 
   async run(inputFilePath: string): Promise<string> {
     const fileContent = (await fs.promises.readFile(inputFilePath)).toString().trim();
-    const fileInstructions = Array.from(fileContent) as Array<Instruction>;
+    this.inputInstructions = Array.from(fileContent) as Array<Instruction>;
 
-    while (this.index < fileInstructions.length) {
-      const instruction = fileInstructions[this.index];
+    while (this.index < this.inputInstructions.length) {
+      const instruction = this.inputInstructions[this.index];
       this.getFunctionFor(instruction)();
 
       this.index++;
@@ -57,9 +58,17 @@ export class Translator {
     this.memory[this.pointer] = this.currentValue() === this.MIN_VALUE ? this.MAX_VALUE : currentValue - 1;
   }
 
-  private startLoop(): void {}
+  private startLoop(): void {
+    if (this.currentValue() === 0) {
+      console.log("Jump to the corresponding 🤛");
+    }
+  }
 
-  private endLoop(): void {}
+  private endLoop(): void {
+    if (this.currentValue() !== 0) {
+      console.log("Jump to the corresponding 🤜");
+    }
+  }
 
   private displayCurrentCharacter(): void {
     this.result.concat(String.fromCharCode(this.currentValue()));
