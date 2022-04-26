@@ -27,10 +27,12 @@ export class Translator {
 
   private increasePointer(): void {
     this.pointer++;
+    this.memory[this.pointer] ??= 0;
   }
 
   private decreasePointer(): void {
     this.pointer--;
+    this.memory[this.pointer] ??= 0;
   }
 
   private increaseValue(): void {}
