@@ -16,6 +16,9 @@ export class Translator {
   private memory: Array<number> = [];
   private pointer: number = 0;
 
+  private readonly MIN_VALUE = 0;
+  private readonly MAX_VALUE = 255;
+
   async run(inputFilePath: string): Promise<string> {
     const fileContent = (await fs.promises.readFile(inputFilePath)).toString().trim();
     const fileInstructions = Array.from(fileContent) as Array<Instruction>;
@@ -35,9 +38,15 @@ export class Translator {
     this.memory[this.pointer] ??= 0;
   }
 
-  private increaseValue(): void {}
+  private increaseValue(): void {
+    const currentValue = this.memory[this.pointer];
+    this.memory[this.pointer] = currentValue === this.MAX_VALUE ? this.MIN_VALUE : currentValue + 1;
+  }
 
-  private decreaseValue(): void {}
+  private decreaseValue(): void {
+    const currentValue = this.memory[this.pointer];
+    this.memory[this.pointer] = currentValue === this.MIN_VALUE ? this.MAX_VALUE : currentValue - 1;
+  }
 
   private startLoop(): void {}
 
