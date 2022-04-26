@@ -21,11 +21,18 @@ export class Translator {
 
   private result: string = "";
 
+  private index: number = 0;
+
   async run(inputFilePath: string): Promise<string> {
     const fileContent = (await fs.promises.readFile(inputFilePath)).toString().trim();
     const fileInstructions = Array.from(fileContent) as Array<Instruction>;
 
-    console.log(fileInstructions);
+    while (this.index < fileInstructions.length) {
+      const instruction = fileInstructions[this.index];
+      this.getFunctionFor(instruction)();
+
+      this.index++;
+    }
 
     return this.result;
   }
@@ -60,5 +67,13 @@ export class Translator {
 
   private currentValue(): number {
     return this.memory[this.pointer];
+  }
+
+  private getFunctionFor(instruction: Instruction): Function {
+    const fn = this.instructions.get(instruction);
+
+    if (!fn) throw new Error(`No function defined for instruction ${instruction}`);
+
+    return fn;
   }
 }
