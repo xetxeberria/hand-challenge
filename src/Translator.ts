@@ -45,7 +45,6 @@ export class Translator {
 
   private decreasePointer(): void {
     this.pointer--;
-    this.memory[this.pointer] ??= 0;
   }
 
   private increaseValue(): void {
