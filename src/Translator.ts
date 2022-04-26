@@ -27,7 +27,7 @@ export class Translator {
 
     console.log(fileInstructions);
 
-    return "";
+    return this.result;
   }
 
   private increasePointer(): void {
