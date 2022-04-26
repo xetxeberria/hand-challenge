@@ -19,6 +19,8 @@ export class Translator {
   private readonly MIN_VALUE = 0;
   private readonly MAX_VALUE = 255;
 
+  private result: string = "";
+
   async run(inputFilePath: string): Promise<string> {
     const fileContent = (await fs.promises.readFile(inputFilePath)).toString().trim();
     const fileInstructions = Array.from(fileContent) as Array<Instruction>;
@@ -52,5 +54,7 @@ export class Translator {
 
   private endLoop(): void {}
 
-  private displayCurrentCharacter(): void {}
+  private displayCurrentCharacter(): void {
+    this.result.concat(String.fromCharCode(this.memory[this.pointer]));
+  }
 }
