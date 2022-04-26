@@ -42,12 +42,12 @@ export class Translator {
 
   private increaseValue(): void {
     const currentValue = this.memory[this.pointer];
-    this.memory[this.pointer] = currentValue === this.MAX_VALUE ? this.MIN_VALUE : currentValue + 1;
+    this.memory[this.pointer] = this.currentValue() === this.MAX_VALUE ? this.MIN_VALUE : currentValue + 1;
   }
 
   private decreaseValue(): void {
     const currentValue = this.memory[this.pointer];
-    this.memory[this.pointer] = currentValue === this.MIN_VALUE ? this.MAX_VALUE : currentValue - 1;
+    this.memory[this.pointer] = this.currentValue() === this.MIN_VALUE ? this.MAX_VALUE : currentValue - 1;
   }
 
   private startLoop(): void {}
@@ -55,6 +55,10 @@ export class Translator {
   private endLoop(): void {}
 
   private displayCurrentCharacter(): void {
-    this.result.concat(String.fromCharCode(this.memory[this.pointer]));
+    this.result.concat(String.fromCharCode(this.currentValue()));
+  }
+
+  private currentValue(): number {
+    return this.memory[this.pointer];
   }
 }
