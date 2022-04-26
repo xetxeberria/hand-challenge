@@ -13,7 +13,7 @@ export class Translator {
     ["👊", () => this.displayCurrentCharacter()]
   ]);
 
-  private memory: Array<number> = [];
+  private memory: Array<number> = [0];
   private pointer: number = 0;
 
   private readonly MIN_VALUE = 0;
@@ -40,7 +40,7 @@ export class Translator {
 
   private increasePointer(): void {
     this.pointer++;
-    this.memory[this.pointer] ??= 0;
+    if (this.memory[this.pointer] === undefined) this.memory[this.pointer] = 0;
   }
 
   private decreasePointer(): void {
@@ -48,29 +48,27 @@ export class Translator {
   }
 
   private increaseValue(): void {
-    const currentValue = this.memory[this.pointer];
-    this.memory[this.pointer] = this.currentValue() === this.MAX_VALUE ? this.MIN_VALUE : currentValue + 1;
+    this.memory[this.pointer] = this.currentValue() === this.MAX_VALUE ? this.MIN_VALUE : this.currentValue() + 1;
   }
 
   private decreaseValue(): void {
-    const currentValue = this.memory[this.pointer];
-    this.memory[this.pointer] = this.currentValue() === this.MIN_VALUE ? this.MAX_VALUE : currentValue - 1;
+    this.memory[this.pointer] = this.currentValue() === this.MIN_VALUE ? this.MAX_VALUE : this.currentValue() - 1;
   }
 
   private startLoop(): void {
     if (this.currentValue() === 0) {
-      console.log("Jump to the corresponding 🤛");
+      // this.index = this.inputInstructions.indexOf("🤛", this.index);
     }
   }
 
   private endLoop(): void {
     if (this.currentValue() !== 0) {
-      console.log("Jump to the corresponding 🤜");
+      // this.index = this.inputInstructions.lastIndexOf("🤜", this.index);
     }
   }
 
   private displayCurrentCharacter(): void {
-    this.result.concat(String.fromCharCode(this.currentValue()));
+    this.result += String.fromCharCode(this.currentValue());
   }
 
   private currentValue(): number {
