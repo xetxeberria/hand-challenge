@@ -13,6 +13,9 @@ export class Translator {
     ["👊", () => this.displayCurrentCharacter()]
   ]);
 
+  private memory: Array<number> = [];
+  private pointer: number = 0;
+
   async run(inputFilePath: string): Promise<string> {
     const fileContent = (await fs.promises.readFile(inputFilePath)).toString().trim();
     const fileInstructions = Array.from(fileContent) as Array<Instruction>;
@@ -22,9 +25,13 @@ export class Translator {
     return "";
   }
 
-  private increasePointer(): void {}
+  private increasePointer(): void {
+    this.pointer++;
+  }
 
-  private decreasePointer(): void {}
+  private decreasePointer(): void {
+    this.pointer--;
+  }
 
   private increaseValue(): void {}
 
